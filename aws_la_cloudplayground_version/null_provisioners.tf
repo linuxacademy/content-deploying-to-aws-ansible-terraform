@@ -3,7 +3,6 @@ resource "null_resource" "inventory_master" {
     my_value1 = join(",", [aws_key_pair.master-key.key_name])
   }
   provisioner "local-exec" {
-    #command = "echo -en 'localhost ansible_connection=local\n[jenkins-master]\n' > ansible_templates/inventory"
     command = <<EOD
 cat <<EOF > ansible_templates/inventory
 localhost ansible_connection=local
@@ -18,7 +17,6 @@ resource "null_resource" "inventory_worker" {
     my_value2 = join(",", [aws_key_pair.worker-key.key_name])
   }
   provisioner "local-exec" {
-    #command = "echo -en 'localhost ansible_connection=local\n[worker]\n' > ansible_templates/inventory_worker"
     command = <<EOD
 cat <<EOF > ansible_templates/inventory_worker
 localhost ansible_connection=local

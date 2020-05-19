@@ -9,7 +9,7 @@
   <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@1.31.2">
     <host>{{ ipv4 }}</host>
     <port>22</port>
-    <credentialsId>JenkinsCreds</credentialsId>
+    <credentialsId>JenkinsCreds-{{ ipv4 }}</credentialsId>
     <launchTimeoutSeconds>60</launchTimeoutSeconds>
     <maxNumRetries>10</maxNumRetries>
     <retryWaitTime>15</retryWaitTime>

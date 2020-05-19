@@ -31,6 +31,7 @@
         - name: Copy over creds.xml and create Jenkins credential
           vars:
             priv_key: "{{ pkey['content'] | b64decode }}"
+            ipv4: "{{ ansible_default_ipv4.address }}"
           template:
             src: cred-privkey.j2
             dest: /home/ec2-user/creds.xml

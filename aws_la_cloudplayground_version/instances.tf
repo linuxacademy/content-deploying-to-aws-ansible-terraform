@@ -5,9 +5,8 @@ terraform {
     region  = "us-east-1"
     profile = "default"
     key     = "terraform-state-file/mystatefile.tfstate"
-    bucket  = "tf-statefile"
+    bucket  = "<already-existing-buckets-name-here"
   }
-  #  experiments = [variable_validation]
 }
 
 #Get Linux AMI ID using SSM Parameter endpoint in us-east-1
@@ -50,7 +49,6 @@ resource "aws_instance" "jenkins-master" {
     command = "rm -f ansible_templates/inventory"
   }
   provisioner "local-exec" {
-    #command = "echo -en '${self.public_ip} ansible_user=ec2-user\n'>> ansible_templates/inventory"
     command = <<EOD
 cat <<EOF >> ansible_templates/inventory
 ${self.public_ip} ansible_user=ec2-user
@@ -69,6 +67,7 @@ EOD
 #Create EC2 in us-west-2
 resource "aws_instance" "jenkins-worker-oregon" {
   provider                    = aws.region-worker
+  count                       = var.workers-count
   ami                         = data.aws_ssm_parameter.linuxAmiOregon.value
   instance_type               = var.instance-type
   key_name                    = aws_key_pair.worker-key.key_name
@@ -76,7 +75,6 @@ resource "aws_instance" "jenkins-worker-oregon" {
   vpc_security_group_ids      = [aws_security_group.jenkins-sg-oregon.id]
   subnet_id                   = aws_subnet.subnet_1_oregon.id
   provisioner "local-exec" {
-    #    command = "echo -en '${self.public_ip} ansible_user=ec2-user\n' >> ansible_templates/inventory_worker"
     command = <<EOD
 cat <<EOF >> ansible_templates/inventory_worker
 ${self.public_ip} ansible_user=ec2-user
@@ -84,13 +82,13 @@ EOF
 EOD
   }
   provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f ansible_templates/inventory_worker"
+    when = destroy
+    command = "sed -i '/${self.public_ip}/d' ansible_templates/inventory_worker &> /dev/null || echo"
   }
   provisioner "local-exec" {
-    command = "aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-worker} --instance-ids ${self.id} && ansible-playbook --extra-vars 'master_ip=${aws_instance.jenkins-master.private_ip} worker_priv_ip=${self.private_ip}' -i ansible_templates/inventory_worker ansible_templates/install_worker.yaml"
+    command = "aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-worker} --instance-ids ${self.id} && ansible-playbook --extra-vars 'master_ip=${aws_instance.jenkins-master.private_ip} worker_priv_ip=${self.private_ip}' -i ansible_templates/inventory_worker -l ${self.public_ip} ansible_templates/install_worker.yaml"
   }
   tags = {
-    Name = "jenkins-worker-tf"
+    Name = join("-", ["jenkins-worker-tf", count.index + 1])
   }
 }

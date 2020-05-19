@@ -14,7 +14,7 @@ variable "instance-type" {
 
 variable "dns-name" {
   type    = string
-  default = "<domain-ending-with-dot>" # e.g "cmcloudlab1234.info."
+  default = "<public-hosted-zone-name-ending-with-dot" # e.g "cmcloudlab1234.info."
 }
 
 variable "profile" {
@@ -31,3 +31,11 @@ variable "region-worker" {
   type    = string
   default = "us-west-2"
 }
+
+#How many Jenkins workers to spin up
+variable "workers-count" {
+  type    = number
+  default = 1
+}
+
+
