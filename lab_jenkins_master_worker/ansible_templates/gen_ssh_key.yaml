@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Generate an SSH keypair for using in Terraform templates
+      openssh_keypair:
+        path: ~/.ssh/id_rsa
+        state: present
+        type: rsa
+        size: 2048
+        force: no

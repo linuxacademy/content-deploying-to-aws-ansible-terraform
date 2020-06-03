@@ -11,13 +11,13 @@ terraform {
 }
 
 #Get Linux AMI ID using SSM Parameter endpoint in us-east-1
-data "aws_ssm_parameter" "linuxAmi" {
+data "aws_ssm_parameter" "JenkinsMasterAmi" {
   provider = aws.region-master
   name     = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
 #Get Linux AMI ID using SSM Parameter endpoint in us-west-2
-data "aws_ssm_parameter" "linuxAmiOregon" {
+data "aws_ssm_parameter" "JenkinsWorkerAmi" {
   provider = aws.region-worker
   name     = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
@@ -39,7 +39,7 @@ resource "aws_key_pair" "worker-key" {
 #Create and bootstrap EC2 in us-east-1
 resource "aws_instance" "jenkins-master" {
   provider                    = aws.region-master
-  ami                         = data.aws_ssm_parameter.linuxAmi.value
+  ami                         = data.aws_ssm_parameter.JenkinsMasterAmi.value
   instance_type               = var.instance-type
   key_name                    = aws_key_pair.master-key.key_name
   associate_public_ip_address = true
@@ -67,10 +67,10 @@ EOD
 }
 
 #Create EC2 in us-west-2
-resource "aws_instance" "jenkins-worker-oregon" {
+resource "aws_instance" "jenkins-worker" {
   provider                    = aws.region-worker
   count                       = var.workers-count
-  ami                         = data.aws_ssm_parameter.linuxAmiOregon.value
+  ami                         = data.aws_ssm_parameter.JenkinsWorkerAmi.value
   instance_type               = var.instance-type
   key_name                    = aws_key_pair.worker-key.key_name
   associate_public_ip_address = true

@@ -26,8 +26,7 @@
           slurp:
             src: /home/ec2-user/.ssh/id_rsa
           register: pkey
-        - debug:
-            msg: "{{ pkey['content'] | b64decode }}"
+
         - name: Copy over creds.xml and create Jenkins credential
           vars:
             priv_key: "{{ pkey['content'] | b64decode }}"
@@ -55,7 +54,7 @@
             force: yes
           register: download
           ignore_errors: yes
-          until: '"{{ download.status_code }}" == "200"'
+          until: download.status_code|default(200) == 200
           retries: 5
           delay: 5
     
