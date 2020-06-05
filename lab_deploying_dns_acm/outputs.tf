@@ -1,5 +1,5 @@
 output "url" {
-  value = aws_route53_record.jenkins.fqdn
+  value = aws_route53_record.webservers.fqdn
 }
 
 output "Apache1" {
