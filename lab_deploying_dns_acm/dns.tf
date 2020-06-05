@@ -19,7 +19,7 @@ resource "aws_route53_record" "cert_validation" {
 resource "aws_route53_record" "webservers" {
   provider = aws.region-master
   zone_id  = data.aws_route53_zone.dns.zone_id
-  name     = join(".", ["mysite", data.aws_route53_zone.dns.name])
+  name     = join(".", [var.site-name, data.aws_route53_zone.dns.name])
   type     = "A"
   alias {
     name                   = aws_lb.application-lb.dns_name
