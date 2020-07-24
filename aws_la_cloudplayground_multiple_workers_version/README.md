@@ -23,8 +23,20 @@ If you want to read and understand the deployment in sequence. Read through temp
 3. alb_acm.tf
 4. dns.tf
 ```
+*S3 Backend*
+```
+This project requires an S3 backend for storing Terraform state file, therefore in the terraform block in the instances.tf file you'll need to plug in the an actual bucket name before you can run "terraform init".
+Please also note that the "terraform" block does not allow usage of variables so values HAVE to be hardcoded.
+```
+Sample command for bucket creation via CLI:
+```
+aws s3api create-bucket --bucket <YOUR-UNIQUE-BUCKET-NAME-GOES-HERE>
+```
 
-Important note: In the *instances.tf* be sure to plug in valid state file backup bucket name and key in the _terraform_ block, otherwise *terraform init* will fail for sure. 
+Example
+```
+aws s3api create-bucket --bucket myawesomebucketthatmayormaynotexistalready
+```
 
 <h2>Supplementary files </h2> <br />
 
