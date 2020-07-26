@@ -26,8 +26,8 @@
           slurp:
             src: /home/ec2-user/.ssh/id_rsa
           register: pkey
-        - debug:
-            msg: "{{ pkey['content'] | b64decode }}"
+          #- debug:
+          #  msg: "{{ pkey['content'] | b64decode }}"
         - name: Copy over creds.xml and create Jenkins credential
           vars:
             priv_key: "{{ pkey['content'] | b64decode }}"
@@ -82,5 +82,3 @@
             path: ansible_templates/inventory_worker
             state: absent
           delegate_to: localhost
-
-

@@ -5,19 +5,19 @@ output "amiId-us-east-1" {
 output "amiId-us-west-2" {
   value = data.aws_ssm_parameter.linuxAmiOregon.value
 }
-output "publicIp-us-east-1" {
+output "Jenkins-Main-Node-Public-IP" {
   value = aws_instance.jenkins-master.public_ip
 }
-output "privateIp-us-east-1" {
+output "Jenkins-Main-Node-Private-IP" {
   value = aws_instance.jenkins-master.private_ip
 }
-output "publicIps-us-west-2" {
+output "Jenkins-Worker-Public-IP(s)" {
   value = {
     for instance in aws_instance.jenkins-worker-oregon :
     instance.id => instance.public_ip
   }
 }
-output "privateIps-us-west-2" {
+output "Jenkins-Worker-Private-IP(s)" {
   value = {
     for instance in aws_instance.jenkins-worker-oregon :
     instance.id => instance.private_ip
