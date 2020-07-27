@@ -1,0 +1,16 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+		"Sid": "CustomLaxPolicyForACGAWSTFCourse",
+		"Action": [
+			"ec2:*",
+			"acm:*",
+			"elasticloadbalancing:*",
+			"ssm:Describe*",
+			"ssm:Get*",
+			"s3:*"
+		],
+		"Effect": "Allow",
+		"Resource": "*"
+	}]
+}
