@@ -146,20 +146,6 @@ resource "aws_main_route_table_association" "set-worker-default-rt-assoc" {
   route_table_id = aws_route_table.internet_route_oregon.id
 }
 
-#Create association between route table and subnet_1 in us-east-1
-resource "aws_route_table_association" "internet_association" {
-  provider       = aws.region-master
-  subnet_id      = aws_subnet.subnet_1.id
-  route_table_id = aws_route_table.internet_route.id
-}
-
-#Create association between route table and subnet_1_oregon in us-west-2
-resource "aws_route_table_association" "internet_association_oregon" {
-  provider       = aws.region-worker
-  subnet_id      = aws_subnet.subnet_1_oregon.id
-  route_table_id = aws_route_table.internet_route_oregon.id
-}
-
 
 #Create SG for allowing TCP/8080 from * and TCP/22 from your IP in us-east-1
 resource "aws_security_group" "jenkins-sg" {
@@ -179,7 +165,7 @@ resource "aws_security_group" "jenkins-sg" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_security_group.lb-sg.id]
   }
   ingress {
     description = "allow traffic from us-west-2"
@@ -196,7 +182,7 @@ resource "aws_security_group" "jenkins-sg" {
   }
 }
 
-#Create SG for LB, only TCP/80,TCP/443 and access to jenkins-sg
+#Create SG for LB, only TCP/80,TCP/443 and outgoing access
 resource "aws_security_group" "lb-sg" {
   provider    = aws.region-master
   name        = "lb-sg"
@@ -215,13 +201,6 @@ resource "aws_security_group" "lb-sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    description     = "Allow traffic to jenkins-sg"
-    from_port       = 0
-    to_port         = 0
-    protocol        = "tcp"
-    security_groups = [aws_security_group.jenkins-sg.id]
   }
   egress {
     from_port   = 0
