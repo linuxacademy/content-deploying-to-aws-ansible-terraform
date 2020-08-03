@@ -146,20 +146,6 @@ resource "aws_main_route_table_association" "set-worker-default-rt-assoc" {
   route_table_id = aws_route_table.internet_route_oregon.id
 }
 
-#Create association between route table and subnet_1 in us-east-1
-resource "aws_route_table_association" "internet_association" {
-  provider       = aws.region-master
-  subnet_id      = aws_subnet.subnet_1.id
-  route_table_id = aws_route_table.internet_route.id
-}
-
-#Create association between route table and subnet_1_oregon in us-west-2
-resource "aws_route_table_association" "internet_association_oregon" {
-  provider       = aws.region-worker
-  subnet_id      = aws_subnet.subnet_1_oregon.id
-  route_table_id = aws_route_table.internet_route_oregon.id
-}
-
 
 #Create SG for allowing TCP/8080 from * and TCP/22 from your IP in us-east-1
 resource "aws_security_group" "jenkins-sg" {
