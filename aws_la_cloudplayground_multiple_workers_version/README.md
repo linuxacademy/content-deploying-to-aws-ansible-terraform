@@ -17,6 +17,10 @@ on a range of OS's which support above 5 requirments.`
 
 *For Terraform Part*
 ```
+The regional AWS providers are defined in providers.tf
+Terraform configuration and backend is defined in backend.tf.
+
+
 If you want to read and understand the deployment in sequence. Read through templates in the following order:
 1. network_setup.tf
 2. instances.tf --> local-exec provisioners in this templates kick-off Ansible playbooks in ansible_templates/
@@ -25,7 +29,7 @@ If you want to read and understand the deployment in sequence. Read through temp
 ```
 *S3 Backend*
 ```
-This project requires an S3 backend for storing Terraform state file, therefore in the terraform block in the instances.tf file you'll need to plug in the an actual bucket name before you can run "terraform init".
+This project requires an S3 backend for storing Terraform state file, therefore in the terraform block in the backend.tf file you'll need to plug in the an actual bucket name before you can run "terraform init".
 Please also note that the "terraform" block does not allow usage of variables so values HAVE to be hardcoded.
 ```
 Sample command for bucket creation via CLI:
