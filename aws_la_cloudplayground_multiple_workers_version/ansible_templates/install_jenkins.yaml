@@ -16,8 +16,7 @@
     - block:
         - name: clone repo
           git:
-        #repo: https://github.com/linuxacademy/content-cje-pipelines.git
-            repo: https://github.com/moosakhalid/jenkins-la-course.git
+            repo: https://github.com/linuxacademy/content-terraform-jenkins.git
             dest: /tmp/jenkins
 
         - name: Setup Jenkins Repo
