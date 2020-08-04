@@ -1,15 +1,3 @@
-provider "aws" {
-  profile = var.profile
-  region  = var.region-master
-  alias   = "region-master"
-}
-
-provider "aws" {
-  profile = var.profile
-  region  = var.region-worker
-  alias   = "region-worker"
-}
-
 #Create VPC in us-east-1
 resource "aws_vpc" "vpc_master" {
   provider             = aws.region-master

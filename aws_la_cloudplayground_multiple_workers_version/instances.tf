@@ -1,15 +1,3 @@
-#Set S3 backend for persisting TF state file remotely, ensure bucket already exits
-# And that AWS user being used by TF has read/write perms
-terraform {
-  required_version = ">=0.12.0"
-  backend "s3" {
-    region  = "us-east-1"
-    profile = "default"
-    key     = "terraform-state-file/mystatefile.tfstate"
-    bucket  = "<name-of-already-created-bucket>"
-  }
-}
-
 #Get Linux AMI ID using SSM Parameter endpoint in us-east-1
 data "aws_ssm_parameter" "linuxAmi" {
   provider = aws.region-master
@@ -106,5 +94,5 @@ EOD
   tags = {
     Name = join("-", ["jenkins-worker-tf", count.index + 1])
   }
-  depends_on = [aws_main_route_table_association.set-worker-default-rt-assoc]
+  depends_on = [aws_main_route_table_association.set-worker-default-rt-assoc, aws_instance.jenkins-master]
 }
