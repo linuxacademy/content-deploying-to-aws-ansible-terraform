@@ -14,7 +14,7 @@ variable "instance-type" {
 
 variable "dns-name" {
   type    = string
-  default = "<public-hosted-zone-ending-with-dot" # e.g "cmcloudlab1234.info."
+  default = "<public-hosted-zone-ending-with-dot>" # e.g "cmcloudlab1234.info."
 }
 
 variable "profile" {
@@ -36,9 +36,4 @@ variable "region-worker" {
 variable "workers-count" {
   type    = number
   default = 1
-}
-
-variable "phone_number" {
-  type    = string
-  default = "<your-phonenumber-with-country-code" # e.g +17742251135
 }
