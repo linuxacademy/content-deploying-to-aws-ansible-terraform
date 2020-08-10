@@ -1,13 +1,12 @@
 ---
 # aws ec2 ansible dynamic inventory plugin
 plugin: aws_ec2
-#set aws_access_key and secret_key.
-#aws_access_key: <PUT IN YOUR AWS ACCESS KEY>
-#aws_secret_key: <PUT IN YOUR AWS SECRET KEY># set the regions. 
+
 regions: 
   - us-east-1
   - us-west-2
-# - us-east-2# set strict to False    
+# - us-east-2
+# set strict to False    
 # if True this will make invalid entries 
 # a fatal error
 strict: False
@@ -15,13 +14,9 @@ strict: False
 keyed_groups:
   #  each aws ec2 instance has it own instance tags. create  
   #  a tag variable from those tags for ansible to use. 
-  #  if the ec2 tag Name had the value cygnusx1 the tag 
-  #  variable would be: 
-  #  tag_Name_cygnusx1
-  #  if a tag existed for an aws instance as  
-  #  Applications with the value of Oracle the  
-  #  variable would be:
-  #  tag_Applications_Oracle
+  #  if an EC2 tag:Name is acloudguru_machine, it'll be converted to the
+  #  Ansible tag variable name as follows: tag_Name_acloudguru_machine
+  # which can then be passed as a variable value for the host via -e flag
   - key: tags
     prefix: tag
   #
