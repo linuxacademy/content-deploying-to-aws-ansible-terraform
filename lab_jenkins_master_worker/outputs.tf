@@ -5,22 +5,22 @@ output "Jenkins-Master-AMI-ID" {
 output "Jenkins-Worker-AMI-ID" {
   value = data.aws_ssm_parameter.JenkinsWorkerAmi.value
 }
-output "privateIp-us-east-1" {
+output "Jenkins-Master-Private-IP" {
   value = aws_instance.jenkins-master.private_ip
 }
-output "publicIps-us-west-2" {
+output "Jenkins-Worker-Public-IPs" {
   value = {
     for instance in aws_instance.jenkins-worker :
     instance.id => instance.public_ip
   }
 }
-output "privateIps-us-west-2" {
+output "Jenkins-Worker-Private-IPs" {
   value = {
     for instance in aws_instance.jenkins-worker :
     instance.id => instance.private_ip
   }
 }
 
-output "Loadbalancer-DNS" {
+output "Loadbalancer-DNS-URL" {
   value = aws_lb.application-lb.dns_name
 }
