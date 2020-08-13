@@ -5,11 +5,7 @@
    to generate SSH keypair(on local system) used in TF templates and Ansible for connecting to 
    remote EC2 instances.
    
-2. Please create an S3 bucket which the user that is used by Terraform plan/apply has ownership access to.
-   It will be required for backing up TF state file remotely. Otherwise "terraform init"
-   will fail by default.
-   
-3. If you still want to initialize directory via "terraform init", then use the "-backend=false" flag,
+2. If you still want to initialize directory via "terraform init", then use the "-backend=false" flag,
    like so "terraform init -backend=false"
 ```
 
