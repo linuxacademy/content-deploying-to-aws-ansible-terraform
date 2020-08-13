@@ -39,12 +39,6 @@
         name: jenkins 
         state: stopped
    
-    - name: Modify user shell
-      user:
-        name: jenkins
-        shell: /bin/bash
-    
-    
     - name: Delete Jenkins default dir
       file:
         state: absent
