@@ -1,0 +1,11 @@
+#Ansible Jenkins Worker, sample playbook - jenkins-worker-sample.yml
+---
+- hosts: "{{ passed_in_hosts }}"
+  become: yes
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - name: install jq, JSON parser
+      yum:
+        name: jq
+        state: present
