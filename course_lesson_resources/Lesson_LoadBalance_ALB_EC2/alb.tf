@@ -40,7 +40,7 @@ resource "aws_lb_listener" "jenkins-listener-http" {
   port              = "80"
   protocol          = "HTTP"
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.app-lb-tg.id
   }
 }
@@ -53,8 +53,13 @@ resource "aws_lb_target_group_attachment" "jenkins-master-attach" {
   port             = var.webserver-port
 }
 
+#Add the variable webserver-port to variables.tf
+variable "webserver-port" {
+  type    = number
+  default = 80
+}
 
-#Add LB DNS name to outputs
+#Add LB DNS name to outputs.tf
 output "LB-DNS-NAME" {
   value = aws_lb.application-lb.dns_name
 }
