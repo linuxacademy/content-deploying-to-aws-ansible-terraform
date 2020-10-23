@@ -1,0 +1,48 @@
+---
+# aws ec2 ansible dynamic inventory plugin
+plugin: aws_ec2
+
+regions: 
+  - us-east-1
+  - us-west-2
+# - us-east-2
+# set strict to False    
+# if True this will make invalid entries 
+# a fatal error
+strict: False
+
+keyed_groups:
+  #  each aws ec2 instance has it own instance tags. create  
+  #  a tag variable from those tags for ansible to use. 
+  #  if an EC2 tag:Name is acloudguru_machine, it'll be converted to the
+  #  Ansible tag variable name as follows: tag_Name_acloudguru_machine
+  # which can then be passed as a variable value for the host via -e flag
+  - key: tags
+    prefix: tag
+  #
+  # the following keyed groups are from the aws url:
+  # https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html#options   
+  # below are some of the variable that can be used.  
+  # an example for instance_type: 
+  # aws_instance_type_t2_micro
+  - key: architecture
+    prefix: arch
+  - key: tags.Applications
+    separator: ''
+  - key: instance_type
+    prefix: aws_instance_type
+  - key: placement.region
+    prefix: aws_region
+  - key: image_id
+    prefix: aws_image
+  - key: hypervisor
+    prefix: aws_hypervisor
+  - key: 'security_groups|json_query("[].group_id")'
+    prefix: 'security_groups'
+
+hostnames:
+# a list in order of precedence for hostname variables.
+# 
+  - ip-address
+  - dns-name
+  - tag:Name

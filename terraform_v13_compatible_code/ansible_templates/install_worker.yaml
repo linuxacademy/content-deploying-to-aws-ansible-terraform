@@ -1,0 +1,83 @@
+---
+- hosts: "{{ passed_in_hosts }}"
+  become: yes
+  remote_user: ec2-user
+  tasks:
+    - name: Generate SSH Keypair
+      openssh_keypair:
+        path: /home/ec2-user/.ssh/id_rsa
+        type: rsa
+        size: 2048
+        group: ec2-user
+        owner: ec2-user
+    
+    - name: Add own key to authorized_keys file
+      shell: "cat /home/ec2-user/.ssh/id_rsa.pub >> /home/ec2-user/.ssh/authorized_keys && chmod 600 /home/ec2-user/.ssh/authorized_keys"
+
+    - name: Copy over Jenkins Worker Node creation payload xml
+      vars: 
+        ipv4: "{{ ansible_default_ipv4.address }}"
+      template:
+        src: node.j2
+        dest: /home/ec2-user/node.xml
+        owner: ec2-user
+        mode: '0644'
+
+    - name: Read generated private key id_rsa
+      slurp:
+        src: /home/ec2-user/.ssh/id_rsa
+      register: pkey
+
+    - name: Copy over creds.xml and create Jenkins credential
+      vars:
+        priv_key: "{{ pkey['content'] | b64decode }}"
+        ipv4: "{{ ansible_default_ipv4.address }}"
+      template:
+        src: cred-privkey.j2
+        dest: /home/ec2-user/creds.xml
+
+    - name: install dependencies
+      yum:
+        name: "{{ package }} "
+      vars:
+        package:
+        - wget
+        - java-1.8.0-openjdk-devel
+        - git
+   
+    - name: Get Jenkins CLI jar file
+      vars:
+        master: "{{ master_ip }}"
+      get_url:
+        url: "http://{{ master }}:8080/jnlpJars/jenkins-cli.jar"
+        dest: /home/ec2-user/jenkins-cli.jar
+        force: yes
+      register: download
+      ignore_errors: yes
+      until: download.status_code|default(200) == 200
+      retries: 5
+      delay: 5
+      
+    - name: Allow execute perm to jenkins-cli.jar
+      file:
+        path: /home/ec2-user/jenkins-cli.jar
+        owner: ec2-user
+        group: ec2-user
+        mode: '0777'
+        
+    - name: Place Jenkins Auth file
+      copy:
+        src: jenkins_auth
+        dest: /home/ec2-user/
+        owner: ec2-user
+        mode: '0600'
+
+    - name: Create Jenkins Credential
+      vars:
+        master: "{{ master_ip }}"
+      shell: "cat /home/ec2-user/creds.xml | java -jar /home/ec2-user/jenkins-cli.jar -auth @/home/ec2-user/jenkins_auth -s http://{{master}}:8080 create-credentials-by-xml system::system::jenkins _"
+
+    - name: Register node as worker
+      vars:
+        master: "{{ master_ip }}"
+      shell: 'cat /home/ec2-user/node.xml | java -jar /home/ec2-user/jenkins-cli.jar -auth @/home/ec2-user/jenkins_auth -s http://{{ master }}:8080 create-node'
