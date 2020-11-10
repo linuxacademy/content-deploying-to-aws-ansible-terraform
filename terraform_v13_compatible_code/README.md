@@ -2,7 +2,7 @@
 <h1>Setup Requirements</h1><br />
 
 ```
-1. Terraform binary => 0.12.x # wget -c https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+1. Terraform binary => 0.13.x # wget -c https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
 2. Python3 & PIP needs to be installed on all nodes(on most , modern Linux systems it's available by default) # yum -y install python3-pip
 3. Ansible (install via pip) # pip3 install ansible --user
 4. AWS CLI (install via pip) # pip3 install awscli --user 
