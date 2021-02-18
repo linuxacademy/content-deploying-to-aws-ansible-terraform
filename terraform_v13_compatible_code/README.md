@@ -1,6 +1,9 @@
 
 <h1>Setup Requirements</h1><br />
 
+NOTE: For users following along in their own environments as opposed to the ACG provided environments, please install python's `boto3` module before proceeding.
+
+
 ```
 1. Terraform binary => 0.13.x # wget -c https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
 2. Python3 & PIP needs to be installed on all nodes(on most , modern Linux systems it's available by default) # yum -y install python3-pip
