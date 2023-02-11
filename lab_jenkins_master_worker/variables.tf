@@ -5,7 +5,7 @@ variable "external_ip" {
 
 variable "instance-type" {
   type    = string
-  default = "t3.micro"
+  default = "t2.micro"
 }
 
 variable "profile" {
