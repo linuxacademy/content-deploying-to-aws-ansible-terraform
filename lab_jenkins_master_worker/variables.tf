@@ -20,7 +20,7 @@ variable "region-master" {
 
 variable "region-worker" {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1" # Same region, reduce cost
 }
 
 #How many Jenkins workers to spin up
