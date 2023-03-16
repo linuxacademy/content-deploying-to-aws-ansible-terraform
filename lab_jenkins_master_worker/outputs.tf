@@ -1,9 +1,11 @@
 output "Jenkins-Master-AMI-ID" {
   value = data.aws_ssm_parameter.JenkinsMasterAmi.value
+  sensitive = true
 }
 
 output "Jenkins-Worker-AMI-ID" {
   value = data.aws_ssm_parameter.JenkinsWorkerAmi.value
+  sensitive = true
 }
 output "Jenkins-Master-Private-IP" {
   value = aws_instance.jenkins-master.private_ip
