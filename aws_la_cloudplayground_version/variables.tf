@@ -14,7 +14,7 @@ variable "instance-type" {
 
 variable "dns-name" {
   type    = string
-  default = "<public-hosted-zone-name-ending-with-dot" # e.g "cmcloudlab1234.info."
+  default = "<public-hosted-zone-name-ending-with-dot>" # e.g "cmcloudlab1234.info."
 }
 
 variable "profile" {
